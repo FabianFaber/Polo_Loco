@@ -3,6 +3,10 @@ class Character extends MovableObject {
     width = 100;
     y = 185;
     speed = 10;
+    energy = 100;
+    coins = 0;
+    bottles = 0;
+
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -40,6 +44,33 @@ class Character extends MovableObject {
         'img/2_character_pepe/4_hurt/H-43.png',
     ];
 
+    IMAGES_HEALTH = [
+        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/20.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/40.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/60.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/80.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png',
+    ];
+
+    IMAGES_COINS = [
+        'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/100.png',
+        'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/80.png',
+        'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/60.png',
+        'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/40.png',
+        'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/20.png',
+        'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/0.png',
+    ];
+
+    IMAGES_BOTTLES = [
+        'img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/100.png',
+        'img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/80.png',
+        'img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/60.png',
+        'img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/40.png',
+        'img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/20.png',
+        'img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/0.png',
+    ];
+
     world;
     walking_sound = new Audio('audio/running.ogg');
 
@@ -50,11 +81,8 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
         this.applyGravity();
-
         this.animate();
     }
-
-
 
     animate() {
         setInterval(() => {
@@ -75,28 +103,32 @@ class Character extends MovableObject {
                     this.walking_sound.pause();
                 }
             }
-    
+
             if ((this.world.keyboard.UP || this.world.keyboard.SPACE) && !this.isAboveGround()) {
                 this.jump();
             }
-    
+
             this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
-    
+
         setInterval(() => {
-            if(this.isDead()){
+            if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
-            }
-            else if(this.isHurt()){
+            } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
-            }
-            else if (this.isAboveGround()) {
+            } else if (this.isAboveGround()) {
                 this.playAnimation(this.IMAGES_JUMPING);
-            } 
-            else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-                    this.playAnimation(this.IMAGES_WALKING);
-                
+            } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+                this.playAnimation(this.IMAGES_WALKING);
             }
         }, 50);
-    };
+    }
+
+    collectCoin() {
+        this.coins += 1;
+    }
+
+    collectBottle() {
+        this.bottles += 1;
+    }
 }

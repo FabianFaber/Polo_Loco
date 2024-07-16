@@ -1,4 +1,4 @@
-class Bottels extends MovableObject {
+class Bottles extends MovableObject {
     width = 70;
     height = 80;
     constructor(path, x, y) {
