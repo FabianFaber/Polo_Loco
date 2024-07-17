@@ -38,11 +38,11 @@ const level1 = new Level(
 
     [
         new Coin('img/8_coin/coin_1.png', 700, 200),
-        new Coin('img/8_coin/coin_1.png', 2200, 150),
+        new Coin('img/8_coin/coin_1.png', 1650, 150),
         new Coin('img/8_coin/coin_1.png', 1200, 130),
         new Coin('img/8_coin/coin_1.png', 1420, 150),
         new Coin('img/8_coin/coin_1.png', 830, 170),
-        new Coin('img/8_coin/coin_1.png', 2240, 136),
+        new Coin('img/8_coin/coin_1.png', 2040, 136),
         new Coin('img/8_coin/coin_1.png', 1990, 190),
         new Coin('img/8_coin/coin_1.png', 500, 130),
         new Coin('img/8_coin/coin_1.png', 900, 160),
@@ -50,16 +50,16 @@ const level1 = new Level(
     ],
 
     [
-        new Bottles('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png', 700, 120),
-        new Bottles('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png', 700, 120),
-        new Bottles('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png', 700, 120),
-        new Bottles('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png', 700, 120),
-        new Bottles('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png', 900, 170),
-        new Bottles('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png', 1100, 130),
-        new Bottles('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png', 1200, 160),
-        new Bottles('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png', 1700, 120),
-        new Bottles('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png', 2000, 200),
-        new Bottles('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png', 2400, 120),
+        new Bottles('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png', 250, 150),
+        new Bottles('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png', 390, 120),
+        new Bottles('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png', 500, 170),
+        new Bottles('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png', 780, 140),
+        new Bottles('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png', 930, 170),
+        new Bottles('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png', 1190, 130),
+        new Bottles('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png', 1320, 160),
+        new Bottles('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png', 1600, 150),
+        new Bottles('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png', 1850, 100),
+        new Bottles('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png', 2000, 180),
 
     ],
 );

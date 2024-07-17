@@ -46,7 +46,7 @@ document.addEventListener("keydown", (event) => {
         keyboard.SPACE = true;
     }
 
-    if(event.keyCode == 17) {
+    if(event.keyCode == 81) {
         keyboard.ATTACK = true;
     }
 });
@@ -88,7 +88,7 @@ document.addEventListener("keyup", (event) => {
         keyboard.SPACE = false;
     }
 
-    if(event.keyCode == 17) {
+    if(event.keyCode == 81) {
         keyboard.ATTACK = false;
     }
 });

@@ -1,10 +1,10 @@
 class ThorableObject extends MovableObject {
     constructor(x, y) {
         super().loadImage('img/6_salsa_bottle/salsa_bottle.png');
-        this.x = x;
-        this.y = y;
+        this.x = y;
+        this.y = x;
         this.height = 100;
-        this.width = 40;
+        this.width = 60;
         this.throw();
     }
 
@@ -15,4 +15,6 @@ class ThorableObject extends MovableObject {
                 this.x += 10;
             }, 25);
         }
+
+    
 }

@@ -8,6 +8,7 @@ class World {
     statusBar = new StatusBar(this.character.IMAGES_HEALTH, 20, 0);
     statusBarCoins = new StatusBar(this.character.IMAGES_COINS, 20, 40);
     statusBarBottles = new StatusBar(this.character.IMAGES_BOTTLES, 20, 80);
+    throwableObjects = [];
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -16,6 +17,7 @@ class World {
         this.draw();
         this.setWorld();
         this.checkCollision();
+        this.run();
     }
 
     setWorld() {
@@ -24,21 +26,22 @@ class World {
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    
+
         this.ctx.translate(this.camera_x, 0);
-    
+
         this.addObjectsToMap(this.level.backgroundObjects);
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.enemies);
+        this.addObjectsToMap(this.throwableObjects);
         this.addObjectsToMap(this.level.coin);
         this.addObjectsToMap(this.level.bottles);
         this.addToMap(this.character);
-    
+
         this.ctx.translate(-this.camera_x, 0);
         this.addToMap(this.statusBar);
         this.addToMap(this.statusBarCoins);
         this.addToMap(this.statusBarBottles);
-    
+
         let self = this;
         requestAnimationFrame(function () {
             self.draw();
@@ -76,32 +79,56 @@ class World {
         this.ctx.restore();
     }
 
-    checkCollision() {
+    run() {
         setInterval(() => {
-            this.level.enemies.forEach((enemy) => {
-                if (this.character.isColliding(enemy)) {
-                    this.character.hit();
-                    this.statusBar.setHealthPercentage(this.character.energy);
-                }
-            });
-
-            this.level.coin.forEach((coin) => {
-                if (this.character.isColliding(coin)) {
-                    this.level.coin.splice(this.level.coin.indexOf(coin), 1);
-                    this.character.collectCoin();
-                    this.statusBarCoins.addPoints(10);
-                } 
-            });
-            
-
-            this.level.bottles.forEach((bottle) => {
-                if (this.character.isColliding(bottle)) {
-                    this.level.bottles.splice(this.level.bottles.indexOf(bottle), 1);
-                    this.character.collectBottle();
-                    this.statusBarBottles.addBottlesPoints(10); 
-                }
-            });
-        }, 200);
+            this.checkCollision();
+            this.checkThrowObjects();
+        }, 50);
     }
 
+    checkThrowObjects() {
+        if (this.keyboard.ATTACK) {
+            let bottle = new ThorableObject(this.character.x + 100, this.character.y + 100);
+            this.throwableObjects.push(bottle);
+        }
+    }
+
+    checkCollision() {
+        this.level.enemies.forEach((enemy) => {
+            if (this.character.isColliding(enemy)) {
+                if (!enemy.isDead) {
+                    if (this.character.y + this.character.height > enemy.y &&
+                        this.character.y + this.character.height < enemy.y + enemy.height) {
+                        enemy.dead();
+                        this.character.speedY = 25;
+                        enemy.speed = 0;
+                        setTimeout(() => {
+                            this.level.enemies = this.level.enemies.filter(e => e !== enemy);
+                
+                        }, 1000);
+                    } else {
+                        this.character.hit();
+                        this.statusBar.setHealthPercentage(this.character.energy);
+                    }
+                }
+            }
+        });
+
+        this.level.coin.forEach((coin) => {
+            if (this.character.isColliding(coin)) {
+                this.level.coin.splice(this.level.coin.indexOf(coin), 1);
+                this.character.collectCoin();
+                this.statusBarCoins.addPoints(10);
+            }
+        });
+
+
+        this.level.bottles.forEach((bottle) => {
+            if (this.character.isColliding(bottle)) {
+                this.level.bottles.splice(this.level.bottles.indexOf(bottle), 1);
+                this.character.collectBottle();
+                this.statusBarBottles.addBottlesPoints(10);
+            }
+        });
+    }
 }
