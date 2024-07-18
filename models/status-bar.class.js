@@ -81,6 +81,28 @@ class StatusBar extends DrawableObject {
         }
     }
 
+    setHealthEndbossPercentage(percentage) {
+        this.healthEndbossPercentage = percentage;
+        let path = this.IMAGES[this.resolveEndbossHealthImageIndex()];
+        this.img = this.imageCache[path];
+    }
+
+    resolveEndbossHealthImageIndex() {
+        if (this.healthPercentage == 100) {
+            return 5;
+        } else if (this.healthEndbossPercentage > 80) {
+            return 4;
+        } else if (this.healthEndbossPercentage > 60) {
+            return 3;
+        } else if (this.healthEndbossPercentage > 40) {
+            return 2;
+        } else if (this.healthEndbossPercentage > 20) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
     addPoints(points) {
         this.coinsPercentage += points;
         if (this.coinsPercentage > 100) {

@@ -1,6 +1,7 @@
 class World {
     character = new Character();
     level = level1;
+    endboss = this.level.enemies.length - 1;;
     canvas;
     ctx;
     keyboard;
@@ -8,6 +9,7 @@ class World {
     statusBar = new StatusBar(this.character.IMAGES_HEALTH, 20, 0);
     statusBarCoins = new StatusBar(this.character.IMAGES_COINS, 20, 40);
     statusBarBottles = new StatusBar(this.character.IMAGES_BOTTLES, 20, 80);
+    endbossEnergy = new StatusBar(this.character.IMAGES_HEALTHBAR, 500, 10);
     throwableObjects = [];
 
     constructor(canvas, keyboard) {
@@ -41,6 +43,7 @@ class World {
         this.addToMap(this.statusBar);
         this.addToMap(this.statusBarCoins);
         this.addToMap(this.statusBarBottles);
+        this.addToMap(this.endbossEnergy);
 
         let self = this;
         requestAnimationFrame(function () {
@@ -87,8 +90,8 @@ class World {
     }
 
     checkThrowObjects() {
-        if (this.keyboard.ATTACK) {
-            let bottle = new ThorableObject(this.character.x + 100, this.character.y + 100);
+        if (this.keyboard.ATTACK && this.character.throwBottle()) {
+            let bottle = new ThorableObject(this.character.x + 50, this.character.y);
             this.throwableObjects.push(bottle);
         }
     }
@@ -130,5 +133,25 @@ class World {
                 this.statusBarBottles.addBottlesPoints(10);
             }
         });
+
+        this.throwableObjects.forEach((bottle) => {
+            this.level.enemies.forEach((enemy) => {
+                if (bottle.isColliding(enemy)) {
+                    if (enemy instanceof Endboss) {
+                        enemy.collide(bottle);
+                        this.throwableObjects.splice(this.throwableObjects.indexOf(bottle), 1);
+                        this.endbossEnergy.setHealthPercentage(enemy.energy); // Update endbossEnergy here
+                        setTimeout(() => {
+                            this.level.enemies = this.level.enemies.filter(enemy => {
+                                if (enemy instanceof Endboss && enemy.isDead) {
+                                    return false; 
+                                }
+                                return true; 
+                            });           
+                        }, 1000);
+                    }
+                }
+            });
+        });;
     }
 }

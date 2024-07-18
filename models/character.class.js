@@ -6,6 +6,7 @@ class Character extends MovableObject {
     energy = 100;
     coins = 0;
     bottles = 0;
+    bottlesCollected = 0;
 
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
@@ -71,6 +72,15 @@ class Character extends MovableObject {
         'img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/0.png',
     ];
 
+    IMAGES_HEALTHBAR = [
+        'img/7_statusbars/2_statusbar_endboss/green/green0.png',
+        'img/7_statusbars/2_statusbar_endboss/green/green20.png',
+        'img/7_statusbars/2_statusbar_endboss/green/green40.png',
+        'img/7_statusbars/2_statusbar_endboss/green/green60.png',
+        'img/7_statusbars/2_statusbar_endboss/green/green80.png',
+        'img/7_statusbars/2_statusbar_endboss/green/green100.png'
+    ];
+
     world;
     walking_sound = new Audio('audio/running.ogg');
 
@@ -130,5 +140,15 @@ class Character extends MovableObject {
 
     collectBottle() {
         this.bottles += 1;
+        this.bottlesCollected++;
+    }
+
+    throwBottle() {
+        if (this.bottlesCollected > 0) {
+            this.bottlesCollected--;
+            this.world.statusBarBottles.addBottlesPoints(-10);
+            return true;
+        }
+        return false;
     }
 }

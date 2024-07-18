@@ -4,6 +4,7 @@ class Endboss extends MovableObject {
     width = 250;
     y = 50;
     energy = 100; 
+    isDead = false;
     
 
     IMAGES_WALKING = [
@@ -16,15 +17,6 @@ class Endboss extends MovableObject {
         'img/4_enemie_boss_chicken/2_alert/G11.png',
         'img/4_enemie_boss_chicken/2_alert/G12.png'
     ];
-
-    IMAGES_STATUSBAR = [
-        'img/7_statusbars/2_statusbar_endboss/green/green0.png',
-        'img/7_statusbars/2_statusbar_endboss/green/green20.png',
-        'img/7_statusbars/2_statusbar_endboss/green/green40.png',
-        'img/7_statusbars/2_statusbar_endboss/green/green60.png',
-        'img/7_statusbars/2_statusbar_endboss/green/green80.png',
-        'img/7_statusbars/2_statusbar_endboss/green/green100.png'
-    ]
 
     IMAGES_DEAD = [
         'img/4_enemie_boss_chicken/5_dead/G24.png',
@@ -41,10 +33,13 @@ class Endboss extends MovableObject {
     }
 
     collide(bottle) {
-        if (bottle instanceof Bottle) {
+        if (bottle instanceof ThorableObject) {
+            console.log('Endboss getroffen! Energie vorher:', this.energy);
             this.energy -= 20;
-            if (this.energy <= 0) {
-                this.dead();
+            console.log('Energie nachher:', this.energy);
+            if (this.energy <= 0 && !this.isDead) {
+                this.isDead = true; 
+                this.dead(); 
             }
         }
     }
@@ -53,7 +48,15 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_DEAD);
         this.playAnimation(this.IMAGES_DEAD, () => {
             this.image = this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1];
+            setInterval(() => {
+                clearInterval(this.deadEndboss);  
+            }, 1000);
+           
         });
+
+        this.deadEndboss = setInterval(() => {
+            this.playAnimation(this.IMAGES_DEAD);
+        }, 200);
     }
 
     animate() {
