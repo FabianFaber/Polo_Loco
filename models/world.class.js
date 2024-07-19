@@ -12,6 +12,8 @@ class World {
     endbossEnergy = new StatusBar(this.character.IMAGES_HEALTHBAR, 500, 40);
     throwableObjects = [];
     canThrow = true;
+    gameOverScreenShown = false;
+    gameWon = false;
 
 
     constructor(canvas, keyboard) {
@@ -56,11 +58,15 @@ class World {
         this.addToMap(this.statusBarBottles);
         this.addToMap(this.endbossEnergy);
 
-        let self = this;
-        requestAnimationFrame(function () {
-            self.draw();
-        });
+        if (this.gameOver) {
+            this.showGameOverScreen();
+        } else if (this.gameWon) {
+            this.showWinScreen();  
+        } else {
+            requestAnimationFrame(() => this.draw());  
+        }
     }
+
     addObjectsToMap(objects) {
         if (objects && Array.isArray(objects)) {
             objects.forEach(o => {
@@ -125,11 +131,15 @@ class World {
                         enemy.speed = 0;
                         setTimeout(() => {
                             this.level.enemies = this.level.enemies.filter(e => e !== enemy);
-                
                         }, 1000);
                     } else {
                         this.character.hit();
                         this.statusBar.setHealthPercentage(this.character.energy);
+                    }
+                    
+                    if (this.character.energy <= 0) {
+                        this.gameOver = true;
+                        this.showGameOverScreen();
                     }
                 }
             }
@@ -159,17 +169,73 @@ class World {
                         enemy.collide(bottle);
                         this.throwableObjects.splice(this.throwableObjects.indexOf(bottle), 1);
                         this.endbossEnergy.setHealthPercentage(enemy.energy);
-                        setTimeout(() => {
-                            this.level.enemies = this.level.enemies.filter(enemy => {
-                                if (enemy instanceof Endboss && enemy.isDead) {
-                                    return false; 
-                                }
-                                return true; 
-                            });           
-                        }, 1000);
+                        if (enemy.isDead) {
+                            this.gameWon = true;
+                            this.showWinScreen();
+                        }
                     }
                 }
             });
-        });;
+        });
+    }
+
+    showGameOverScreen() {
+        if (this.gameOverScreenShown) return;
+        this.gameOverScreenShown = true;
+    
+        const gameOverImage = new Image();
+        gameOverImage.src = 'img/9_intro_outro_screens/game_over/game over!.png';
+        
+        gameOverImage.onload = () => {
+            const imageWidth = gameOverImage.width / 2;
+            const imageHeight = gameOverImage.height / 2;
+            const centerX = (this.canvas.width - imageWidth) / 2;
+            const centerY = (this.canvas.height - imageHeight) / 2;
+            
+            this.ctx.drawImage(gameOverImage, centerX, centerY, imageWidth, imageHeight);
+    
+            this.clearButtons();
+            this.createCenteredButton("Retry", () => location.reload(), 520, 280); 
+        };
+    
+        gameOverImage.onerror = () => {
+            console.error('Failed to load image:', gameOverImage.src);
+        };
+    }
+
+    showWinScreen() {
+        const winImage = new Image();
+        winImage.src = 'img/9_intro_outro_screens/win/win_1.png';
+        winImage.onload = () => {
+            const imageWidth = winImage.width / 2; 
+            const imageHeight = winImage.height / 2; 
+            const centerX = (this.canvas.width - imageWidth) / 2;
+            const centerY = (this.canvas.height - imageHeight) / 2;
+            this.ctx.drawImage(winImage, centerX, centerY, imageWidth, imageHeight);
+
+            this.clearButtons();
+            this.createCenteredButton("Retry", () => location.reload(), 450 , 280);
+            this.createCenteredButton("Next Level", () => this.loadNextLevel(), 550 , 280);
+        };
+    }
+
+    createCenteredButton(text, callback, x, y) {
+        const button = document.createElement("button");
+        button.innerHTML = text;
+        button.style.position = "absolute";
+        button.style.left = `${x}px`;
+        button.style.top = `${y}px`;
+        button.onclick = callback;
+        document.body.appendChild(button);
+    }
+
+    clearButtons() {
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(button => button.remove());
+    }
+
+    loadNextLevel() {
+        // Hier die Logik für das Laden des nächsten Levels einfügen
+        console.log('Loading next level...');
     }
 }
