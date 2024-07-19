@@ -84,7 +84,7 @@ class Character extends MovableObject {
     world;
     walking_sound = new Audio('audio/running.ogg');
 
-    constructor() {
+    constructor(keyboard) {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_JUMPING);
@@ -140,13 +140,11 @@ class Character extends MovableObject {
 
     collectBottle() {
         this.bottles += 1;
-        this.bottlesCollected++;
     }
 
     throwBottle() {
-        if (this.bottlesCollected > 0) {
-            this.bottlesCollected--;
-            this.world.statusBarBottles.addBottlesPoints(-10);
+        if (this.bottles > 0) {
+            this.bottles -= 1;
             return true;
         }
         return false;

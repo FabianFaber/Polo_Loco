@@ -1,11 +1,53 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+const fullScreenButton = document.getElementById('FULLSCREEN');
+let isFullScreen = false;
 
 function init() {
     canvas = document.getElementById('canvas');
-    world = new World(canvas, keyboard);
+    showStartScreen();
 }
+
+function showStartScreen() {
+    let ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let startScreenImage = new Image();
+    startScreenImage.src = 'img/9_intro_outro_screens/start/startscreen_1.png';
+    startScreenImage.onload = function () {
+        ctx.drawImage(startScreenImage, 0, 0, canvas.width, canvas.height);
+        addButtonToCanvas("Start Game", startGame);
+    };
+}
+
+function addButtonToCanvas(text, callback) {
+    const button = document.createElement("button");
+    button.innerHTML = text;
+    button.style.position = 'absolute';
+    button.style.top = canvas.offsetTop + 50 + 'px'; 
+    button.style.left = canvas.offsetLeft + (canvas.width / 2 - 50) + 'px'; 
+    button.style.zIndex = 2;
+    document.body.appendChild(button);
+    button.onclick = () => {
+        callback();
+        document.body.removeChild(button);
+    };
+}
+
+function startGame() {
+    world = new World(canvas, keyboard);
+    world.setWorld();
+    world.run();
+    world.draw();
+}
+
+fullScreenButton.addEventListener('click', async () => {
+    try {
+      await canvas.requestFullscreen();
+    } catch (error) {
+      console.error('Error entering full screen mode:', error);
+    }
+  });
 
 document.addEventListener("keydown", (event) => {
     if(event.keyCode == 39) {

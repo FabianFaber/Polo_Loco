@@ -9,17 +9,28 @@ class World {
     statusBar = new StatusBar(this.character.IMAGES_HEALTH, 20, 0);
     statusBarCoins = new StatusBar(this.character.IMAGES_COINS, 20, 40);
     statusBarBottles = new StatusBar(this.character.IMAGES_BOTTLES, 20, 80);
-    endbossEnergy = new StatusBar(this.character.IMAGES_HEALTHBAR, 500, 10);
+    endbossEnergy = new StatusBar(this.character.IMAGES_HEALTHBAR, 500, 40);
     throwableObjects = [];
+    canThrow = true;
+
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
-        this.draw();
-        this.setWorld();
-        this.checkCollision();
-        this.run();
+    }
+
+    addButtonToListen(text, callback) {
+        const button = document.createElement("button");
+        button.innerHTML = text;
+        button.onclick = callback;
+        document.body.appendChild(button);
+    }
+
+    showStartScreen() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.drawImage(startScreenImage, 0, 0, this.canvas.width, this.canvas.height);
+        this.addButtonToListen("Start Game", this.startGame);
     }
 
     setWorld() {
@@ -90,9 +101,16 @@ class World {
     }
 
     checkThrowObjects() {
-        if (this.keyboard.ATTACK && this.character.throwBottle()) {
-            let bottle = new ThorableObject(this.character.x + 50, this.character.y);
-            this.throwableObjects.push(bottle);
+        if (this.keyboard.ATTACK && this.canThrow) {
+            if (this.character.throwBottle()) {
+                let bottle = new ThorableObject(this.character.x + 50, this.character.y);
+                this.throwableObjects.push(bottle);
+                this.canThrow = false; 
+                this.statusBarBottles.addBottlesPoints(-10); 
+            }
+        }
+        if (!this.keyboard.ATTACK) {
+            this.canThrow = true; 
         }
     }
 
@@ -140,7 +158,7 @@ class World {
                     if (enemy instanceof Endboss) {
                         enemy.collide(bottle);
                         this.throwableObjects.splice(this.throwableObjects.indexOf(bottle), 1);
-                        this.endbossEnergy.setHealthPercentage(enemy.energy); // Update endbossEnergy here
+                        this.endbossEnergy.setHealthPercentage(enemy.energy);
                         setTimeout(() => {
                             this.level.enemies = this.level.enemies.filter(enemy => {
                                 if (enemy instanceof Endboss && enemy.isDead) {

@@ -50,13 +50,13 @@ class Endboss extends MovableObject {
             this.image = this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1];
             setInterval(() => {
                 clearInterval(this.deadEndboss);  
-            }, 1000);
+            }, 300);
            
         });
 
         this.deadEndboss = setInterval(() => {
             this.playAnimation(this.IMAGES_DEAD);
-        }, 200);
+        }, 100);
     }
 
     animate() {

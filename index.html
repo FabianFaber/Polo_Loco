@@ -1,20 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <title>Document</title>
-    
+
 </head>
+
 <body onload="init()">
-    
+
     <h1>El Pollo Loco</h1>
+    <div class="fullscreen-overlay">
+        <img class="fullscreen-button" id="FULLSCREEN" src="./img/icons/fullscreen.png">
+    </div>
+    <canvas id="canvas" width="720" height="480"></canvas>
 
-    <canvas id="canvas" width="720" height="480">
-
-
-    </canvas>
+    <div class="layout">
+        <div class="movement">
+            <div>
+                <img src="/img/icons/letter-a.png" alt="">
+                <img src="/img/icons/moveLeft.png" alt="" srcset="">
+                <b>Move Left</b>
+            </div>
+            <div>
+                <img src="/img/icons/letter-d.png" alt="" srcset="">
+                <img src="/img/icons/moveRight.png" alt="" srcset="">
+                <b>Move Right</b>
+            </div>
+        </div>
+        <div class="action">
+            <div>
+                <img src="/img/icons/letter-w.png" alt="" srcset="">
+                <img src="/img/icons/jump.png" alt="" srcset="">
+                <img src="/img/icons/space.png" alt="" srcset="">
+                <b>Jump</b>
+            </div>
+            <div>
+                <img src="/img/icons/letter-q.png" alt="">
+                <b>Throw bottle</b>
+            </div>
+        </div>
+    </div>
 
     <script src="./models/world.class.js"></script>
     <script src="./models/drawable-object.class.js"></script>
@@ -35,4 +63,5 @@
     <script src="./js/game.js"></script>
 
 </body>
+
 </html>
