@@ -96,35 +96,37 @@ class Character extends MovableObject {
 
     animate() {
         setInterval(() => {
-            if (!this.world.gameOver) { 
+            if (!this.world.gameWon) { 
+                const isEndbossDead = this.world.level.endboss && this.world.level.endboss.isDead;
+                
                 if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                     this.moveRight();
                     this.otherDirection = false;
-                    if (this.walking_sound.paused) {
+                    if (this.walking_sound.paused && !isEndbossDead) {
                         this.walking_sound.play();
                     }
                 } else if (this.world.keyboard.LEFT && this.x > 0) {
                     this.moveLeft();
                     this.otherDirection = true;
-                    if (this.walking_sound.paused) {
+                    if (this.walking_sound.paused && !isEndbossDead) {
                         this.walking_sound.play();
                     }
                 } else {
-                    if (!this.walking_sound.paused) {
+                    if (!this.walking_sound.paused && !isEndbossDead) {
                         this.walking_sound.pause();
                     }
                 }
-
+    
                 if ((this.world.keyboard.UP || this.world.keyboard.SPACE) && !this.isAboveGround()) {
                     this.jump();
                 }
-
+    
                 this.world.camera_x = -this.x + 100;
             } else {
                 this.walking_sound.pause(); 
             }
         }, 1000 / 60);
-
+    
         setInterval(() => {
             if (!this.world.gameOver) { 
                 if (this.isDead()) {

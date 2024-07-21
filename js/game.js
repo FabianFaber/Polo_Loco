@@ -4,11 +4,17 @@ let keyboard = new Keyboard();
 const fullScreenButton = document.getElementById('FULLSCREEN');
 let isFullScreen = false;
 
+/**
+ * Initializes the game by setting up the canvas and displaying the start screen.
+ */
 function init() {
     canvas = document.getElementById('canvas');
     showStartScreen();
 }
 
+/**
+ * Displays the start screen with an image and a "Start Game" button.
+ */
 function showStartScreen() {
     let ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -20,20 +26,40 @@ function showStartScreen() {
     };
 }
 
+/**
+ * Adds a button to the canvas with the specified text and callback function.
+ * @param {string} text - The text to display on the button.
+ * @param {function} callback - The function to call when the button is clicked.
+ */
 function addButtonToCanvas(text, callback) {
     const button = document.createElement("button");
     button.innerHTML = text;
+    button.className = "game-button";
     button.style.position = 'absolute';
-    button.style.top = canvas.offsetTop + 50 + 'px'; 
-    button.style.left = canvas.offsetLeft + (canvas.width / 2 - 50) + 'px'; 
     button.style.zIndex = 2;
-    document.body.appendChild(button);
+
+    const updateButtonPosition = () => {
+        const canvasRect = canvas.getBoundingClientRect();
+        button.style.left = `${canvasRect.left + canvas.width / 2 - 60}px`;
+        button.style.top = `${canvasRect.top + 50}px`;
+    };
+
+    updateButtonPosition();
+
+    window.addEventListener('resize', updateButtonPosition);
+    document.addEventListener('fullscreenchange', updateButtonPosition);
+
     button.onclick = () => {
         callback();
         document.body.removeChild(button);
     };
+
+    document.body.appendChild(button);
 }
 
+/**
+ * Starts the game by creating a new world and setting up its properties.
+ */
 function startGame() {
     world = new World(canvas, keyboard);
     world.setWorld();
@@ -41,94 +67,35 @@ function startGame() {
     world.draw();
 }
 
+// Event listener to handle full screen mode toggle
 fullScreenButton.addEventListener('click', async () => {
     try {
-      await canvas.requestFullscreen();
+        await canvas.requestFullscreen();
     } catch (error) {
-      console.error('Error entering full screen mode:', error);
-    }
-  });
-
-document.addEventListener("keydown", (event) => {
-    if(event.keyCode == 39) {
-        keyboard.RIGHT = true;
-    }
-
-    if(event.keyCode == 37) {
-        keyboard.LEFT = true;
-    }
-
-    if(event.keyCode == 38) {
-        keyboard.UP = true;
-    }
-
-    if(event.keyCode == 40) {
-        keyboard.DOWN = true;
-    }
-
-    if(event.keyCode == 68) {
-        keyboard.RIGHT = true;
-    }
-
-    if(event.keyCode == 65) {
-        keyboard.LEFT = true;
-    }
-
-    if(event.keyCode == 87) {
-        keyboard.UP = true;
-    }
-
-    if(event.keyCode == 83) {
-        keyboard.DOWN = true;
-    }
-
-    if(event.keyCode == 32) {
-        keyboard.SPACE = true;
-    }
-
-    if(event.keyCode == 81) {
-        keyboard.ATTACK = true;
+        console.error('Error entering full screen mode:', error);
     }
 });
 
+// Event listeners for keyboard keydown events
+document.addEventListener("keydown", (event) => {
+    switch (event.keyCode) {
+        case 39: case 68: keyboard.RIGHT = true; break;
+        case 37: case 65: keyboard.LEFT = true; break;
+        case 38: case 87: keyboard.UP = true; break;
+        case 40: case 83: keyboard.DOWN = true; break;
+        case 32: keyboard.SPACE = true; break;
+        case 81: keyboard.ATTACK = true; break;
+    }
+});
+
+// Event listeners for keyboard keyup events
 document.addEventListener("keyup", (event) => {
-    if(event.keyCode == 39) {
-        keyboard.RIGHT = false;
-    }
-
-    if(event.keyCode == 37) {
-        keyboard.LEFT = false;
-    }
-
-    if(event.keyCode == 38) {
-        keyboard.UP = false;
-    }
-
-    if(event.keyCode == 40) {
-        keyboard.DOWN = false;
-    }
-
-    if(event.keyCode == 68) {
-        keyboard.RIGHT = false;
-    }
-
-    if(event.keyCode == 65) {
-        keyboard.LEFT = false;
-    }
-
-    if(event.keyCode == 87) {
-        keyboard.UP = false;
-    }
-
-    if(event.keyCode == 83) {
-        keyboard.DOWN = false;
-    }
-
-    if(event.keyCode == 32) {
-        keyboard.SPACE = false;
-    }
-
-    if(event.keyCode == 81) {
-        keyboard.ATTACK = false;
+    switch (event.keyCode) {
+        case 39: case 68: keyboard.RIGHT = false; break;
+        case 37: case 65: keyboard.LEFT = false; break;
+        case 38: case 87: keyboard.UP = false; break;
+        case 40: case 83: keyboard.DOWN = false; break;
+        case 32: keyboard.SPACE = false; break;
+        case 81: keyboard.ATTACK = false; break;
     }
 });

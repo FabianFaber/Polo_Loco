@@ -20,11 +20,13 @@ canvas {
 }
 
 .fullscreen-overlay {
+  display: flex;
+  gap: 15px;
   position: absolute; /* update this line */
   top: -500px;
   left: 0;
   bottom: 0;
-  right: -650px;
+  right: -560px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -72,4 +74,14 @@ canvas {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.game-button {
+  width: 150px;
+  height: 50px;
+  border: none;
+  border-radius: 16px;
+  background-color: #FFB500;
+  font-size: 20px;
+  z-index: 99999;
 }
