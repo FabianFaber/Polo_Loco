@@ -19,8 +19,8 @@ class World {
     canThrow = true;
     gameOverScreenShown = false;
     gameWon = false;
-    background_sound = new Audio('audio/background-musik.ogg/');
-    coin_sound = new Audio('audio/coin.ogg.ogg');
+    background_sound = new Audio('audio/background-musik.ogg');
+    coin_sound = new Audio('audio/coin.ogg');
     gameOver_sound = new Audio('audio/game over.ogg');
     gameWin_sound = new Audio('audio/game-win.ogg');
     charHurt_sound = new Audio('audio/hurt char.ogg');
@@ -38,7 +38,6 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
-        this.background_sound.loop = true;
         this.background_sound.play();
     }
 
